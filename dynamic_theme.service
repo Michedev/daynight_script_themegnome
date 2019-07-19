@@ -1,0 +1,8 @@
+[Unit]
+Description=Dynamic theme changer
+[Service]
+Type=simple
+TimeoutStartSec=1
+ExecStart=/usr/bin/dynamic_theme
+[Install]
+WantedBy=default.target
