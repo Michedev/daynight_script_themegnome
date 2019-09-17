@@ -10,6 +10,8 @@ type
         day_shell_theme: string
         night_theme: string
         night_shell_theme: string
+        unite_buttons_night: string
+        unite_buttons_day: string
     Time = ref object
         hour: range[0..23]
         minute: range[0..59]
@@ -65,25 +67,35 @@ proc `-`(a,b: Time): int =
 var EDGE_DAY_NIGHT = new_time(18, 0, 0)
 var EDGE_NIGHT_DAY = new_time(6, 0, 0)
 
-proc new_config(day_theme, day_shell_theme, night_theme, night_shell_theme: string): Config =
+proc new_config(day_theme, night_theme: string): Config =
     result = new(Config)
     result.day_theme = day_theme
     result.day_shell_theme = day_shell_theme
-    result.night_theme = night_theme
-    result.night_shell_theme = night_shell_theme
+    result.night_theme = ""
+    result.night_shell_theme = ""
+    result.unite_buttons_day = ""
+    result.unite_buttons_night = ""
 
 proc read_config(): Config =
-    let path = os.getEnv("HOME") & "/.config/dynamic_theme.json"
+    let path = os.getEnv("HOME") & "/.config/daynight_theme.json"
     let config = json.parseFile(path)
     assert config.kind == JObject, path & " is not a javascript object"
     result = new_config(config["day_theme"].getStr,
-                        config["day_shell_theme"].getStr,
-                        config["night_theme"].getStr,
-                        config["night_shell_theme"].getStr)
+                        config["night_theme"].getStr)
+    if config.contains("day_shell_theme"):
+        config.night_shell_theme = config["day_shell_theme"].getStr
+    if config.contains("night_shell_theme"):
+        config.night_shell_theme = config["night_shell_theme"].getStr    
     if config.contains("edge_day_night"):
         EDGE_DAY_NIGHT = config["edge_day_night"].getStr.to_time
     if config.contains("edge_night_day"):
         EDGE_NIGHT_DAY = config["edge_night_day"].getStr.to_time
+    if config.contains("unite_window_buttons_night"):
+        config.unite_buttons_night = config["unite_window_buttons_night"].getStr
+    if config.contains("unite_window_buttons_day"):
+        config.unite_buttons_night = config["unite_window_buttons_day"].getStr
+    
+    
     
 
 proc cmd_set_shell_theme(theme: string): string =
@@ -92,13 +104,22 @@ proc cmd_set_shell_theme(theme: string): string =
 proc cmd_set_theme(theme: string): string =
     fmt"gsettings set org.gnome.desktop.interface gtk-theme '{theme}'"
 
+proc cmd_set_unite_theme(theme: string): string =
+    fmt"""dconf write "/org/gnome/shell/extensions/unite/window-buttons-theme" "'{theme}'" """
+
 proc set_night_theme(config: Config) =
     var _  = os.execShellCmd(cmd_set_theme(config.night_theme))
-    var _ = os.execShellCmd(cmd_set_shell_theme(config.night_shell_theme))
+    if config.night_shell_theme.len > 0:
+        var _ = os.execShellCmd(cmd_set_shell_theme(config.night_shell_theme))
+    if config.unite_buttons_night.len > 0:
+        var _ = os.execShellCmd(cmd_set_unite_theme(config.unite_buttons_night))
 
 proc set_day_theme(config: Config) = 
     var _  = os.execShellCmd(cmd_set_theme(config.day_theme))
-    var _ = os.execShellCmd(cmd_set_shell_theme(config.day_shell_theme))
+    if config.day_shell_theme.len > 0:
+        var _ = os.execShellCmd(cmd_set_shell_theme(config.day_shell_theme))
+    if config.unite_buttons_day.len > 0:
+        var _ = os.execShellCmd(cmd_set_unite_theme(config.unite_buttons_day))
 
 proc check_time() =
     let config = read_config()
