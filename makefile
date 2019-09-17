@@ -1,7 +1,8 @@
 build:
 	nim c -d:release  daynight_theme
 install:
-	sudo cp dynamic_theme /usr/bin/
+	sudo rm -f /usr/bin/daynight_theme
+	sudo cp daynight_theme /usr/bin/
 install_user_service:
 	mkdir -p ${HOME}/.local/share/systemd/user
 	cp daynight_theme.service ${HOME}/.local/share/systemd/user
