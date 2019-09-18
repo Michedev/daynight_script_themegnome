@@ -1,4 +1,4 @@
-import times
+﻿import times
 import json
 import os
 import strformat
@@ -70,7 +70,7 @@ var EDGE_NIGHT_DAY = new_time(6, 0, 0)
 proc new_config(day_theme, night_theme: string): Config =
     result = new(Config)
     result.day_theme = day_theme
-    result.day_shell_theme = day_shell_theme
+    result.day_shell_theme = ""
     result.night_theme = ""
     result.night_shell_theme = ""
     result.unite_buttons_day = ""
@@ -83,17 +83,17 @@ proc read_config(): Config =
     result = new_config(config["day_theme"].getStr,
                         config["night_theme"].getStr)
     if config.contains("day_shell_theme"):
-        config.night_shell_theme = config["day_shell_theme"].getStr
+        result.night_shell_theme = config["day_shell_theme"].getStr
     if config.contains("night_shell_theme"):
-        config.night_shell_theme = config["night_shell_theme"].getStr    
+        result.night_shell_theme = config["night_shell_theme"].getStr    
     if config.contains("edge_day_night"):
         EDGE_DAY_NIGHT = config["edge_day_night"].getStr.to_time
     if config.contains("edge_night_day"):
         EDGE_NIGHT_DAY = config["edge_night_day"].getStr.to_time
     if config.contains("unite_window_buttons_night"):
-        config.unite_buttons_night = config["unite_window_buttons_night"].getStr
+        result.unite_buttons_night = config["unite_window_buttons_night"].getStr
     if config.contains("unite_window_buttons_day"):
-        config.unite_buttons_night = config["unite_window_buttons_day"].getStr
+        result.unite_buttons_night = config["unite_window_buttons_day"].getStr
     
     
     
