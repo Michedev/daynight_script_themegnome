@@ -71,7 +71,7 @@ proc new_config(day_theme, night_theme: string): Config =
     result = new(Config)
     result.day_theme = day_theme
     result.day_shell_theme = ""
-    result.night_theme = ""
+    result.night_theme = night_theme
     result.night_shell_theme = ""
     result.unite_buttons_day = ""
     result.unite_buttons_night = ""
@@ -93,7 +93,7 @@ proc read_config(): Config =
     if config.contains("unite_window_buttons_night"):
         result.unite_buttons_night = config["unite_window_buttons_night"].getStr
     if config.contains("unite_window_buttons_day"):
-        result.unite_buttons_night = config["unite_window_buttons_day"].getStr
+        result.unite_buttons_day = config["unite_window_buttons_day"].getStr
     
     
     
