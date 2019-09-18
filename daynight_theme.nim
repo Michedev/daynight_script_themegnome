@@ -83,7 +83,7 @@ proc read_config(): Config =
     result = new_config(config["day_theme"].getStr,
                         config["night_theme"].getStr)
     if config.contains("day_shell_theme"):
-        result.night_shell_theme = config["day_shell_theme"].getStr
+        result.day_shell_theme = config["day_shell_theme"].getStr
     if config.contains("night_shell_theme"):
         result.night_shell_theme = config["night_shell_theme"].getStr    
     if config.contains("edge_day_night"):
