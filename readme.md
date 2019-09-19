@@ -36,4 +36,4 @@ A base _daynight_theme.json_ is:
 
 My personal config is: 
 
-` {"day_theme": "ZorinGreen-Light", "night_theme": "ZorinBlue-Dark", "day_shell_theme": "Canta-light-compact", "night_shell_theme": "Flat-Remix-Dark-fullPanel", "unite_window_buttons_night": "materia-dark", "unite_window_buttons_day": "materia-light"}`
+` {"day_theme": "ZorinGreen-Light", "night_theme": "ZorinBlue-Dark", "day_shell_theme": "Canta-light-compact", "night_shell_theme": "Flat-Remix-Dark-fullPanel", "night_unite_buttons": "materia-dark", "day_unite_buttons": "materia-light", "day_icons": "Zafiro-Icons-Light", "night_icons": "Zafiro-Icons-Variant-A"}`
