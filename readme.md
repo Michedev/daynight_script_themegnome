@@ -19,14 +19,22 @@ Additionally there are two optional parameters:
 
 These two parameters must be in the format "HH:MM:SS" and represent respectively the time edge between day/night and vice-versa. In the script are setted by default at _"18:00:00"_ and _"06:00:00"_
 
-##### Unite extension parameters
+##### Unite extension 
 
 If you use Unite extension on Gnome you can set other two optional parameters:
 
-- _unite_window_buttons_day_
-- _unite_window_buttons_night_
+- _day_unite_buttons_
+- _night_unite_buttons_
 
 This two parameters change the windows button theme of Unite extension
+
+##### Icon theme
+
+You can also set the icon theme with these optional fields in the json:
+
+- _day_icons_
+- _night_icons_
+
 
 ### Example
 
