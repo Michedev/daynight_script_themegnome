@@ -1,9 +1,9 @@
 ﻿import time
-import times
 import json
 import os
 import strformat
 import strutils
+from times import now, getClockStr
 
 
 
@@ -54,7 +54,7 @@ proc run_set_unite_theme(theme: string) =
 
 proc new_config(day_theme, night_theme: string): Config =
     result = new(Config)
-    result.commands.add new_config(day_theme, night_theme, run_set_theme)
+    result.commands.add new_command(day_theme, night_theme, run_set_theme)
 
 proc read_config(): Config =
     let path = os.getEnv("HOME") & "/.config/daynight_theme.json"
@@ -63,15 +63,15 @@ proc read_config(): Config =
     result = new_config(config["day_theme"].getStr,
                         config["night_theme"].getStr)
     if config.contains("day_shell_theme") and config.contains("night_shell_theme"):
-        result.commands.add = new_command(config["day_shell_theme"].getStr,
+        result.commands.add new_command(config["day_shell_theme"].getStr,
                                          config["night_shell_theme"].getStr,
                                          run_set_shell_theme)
     if config.contains("night_unite_buttons") and config.contains("day_unite_buttons"):
-        result.commands.add = new_command(config["night_unite_buttons"].getStr,
+        result.commands.add new_command(config["night_unite_buttons"].getStr,
                                            config["day_unite_buttons"].getStr,
                                            run_set_unite_theme)
     if config.contains("day_icons") and config.contains("night_icons"):
-        result.commands.add = new_command(config["day_icons"].getStr,
+        result.commands.add new_command(config["day_icons"].getStr,
                                    config["night_icons"].getStr,
                                    run_set_icon_theme)
     if config.contains("edge_day_night"):
