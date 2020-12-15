@@ -3,6 +3,7 @@ import json
 import os
 import strformat
 import strutils
+import daynight_pycharm
 from times import now, getClockStr
 
 
@@ -60,6 +61,7 @@ proc read_config(): Config =
     let path = os.getEnv("HOME") & "/.config/daynight_theme.json"
     let config = json.parseFile(path)
     assert config.kind == JObject, path & " is not a javascript object"
+    assert config.contains("day_theme") and config.contains("night_theme")
     result = new_config(config["day_theme"].getStr,
                         config["night_theme"].getStr)
     if config.contains("day_shell_theme") and config.contains("night_shell_theme"):
@@ -82,6 +84,10 @@ proc read_config(): Config =
         result.edge_night_day = config["edge_night_day"].getStr.to_time
     else:
         result.edge_night_day = EDGE_NIGHT_DAY
+    result.commands.add new_command(daynight_pycharm.day_theme_xml, daynight_pycharm.night_theme_xml, daynight_pycharm.pycharm_set_theme)
+    result.commands.add new_command(daynight_pycharm.day_color_scheme_xml, daynight_pycharm.night_color_scheme_xml, daynight_pycharm.pycharm_set_color_scheme)
+    echo "Set edge between day and night to " & $(EDGE_DAY_NIGHT)
+    echo "Set edge between night and day to " & $(EDGE_NIGHT_DAY)
     
 proc set_night_theme(config: Config) =
     for command in config.commands:
@@ -99,12 +105,12 @@ proc check_time() =
         let curr_time = now().getClockStr().to_time()
         if curr_time < config.edge_night_day:
             set_night_theme(config)
-            sleep(1000 * (config.edge_night_day - curr_time))
+            sleep(1000 * 60 * 10) #10 minutes
         elif curr_time > config.edge_night_day and curr_time < config.edge_day_night:
             set_day_theme(config)
-            sleep(1000 * (config.edge_day_night - curr_time))
+            sleep(1000 * 60 * 10) #10 minutes
         else:
             set_night_theme(config)
-            sleep(1000 * (config.edge_night_day - curr_time))
+            sleep(1000 * 60 * 10) #10 minutes
 
 check_time()

@@ -5,6 +5,8 @@ type Time* = ref object
     minute: range[0..59]
     second: range[0..60]
 
+proc `$`*(t: Time): string =
+    return t.hour.int_to_str(2) & ":" & t.minute.int_to_str(2) & ":" & t.second.int_to_str(2)
 
 proc to_time*(clock: string): Time =
     result = new(Time)
